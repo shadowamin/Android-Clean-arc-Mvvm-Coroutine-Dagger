@@ -8,24 +8,18 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.paging.LivePagedListBuilder
-import androidx.work.*
 import com.hannibalprojects.sampleproject.R
 import com.hannibalprojects.sampleproject.databinding.FragmentUsersListBinding
-import com.hannibalprojects.sampleproject.presentation.DownloadWorker
 import com.hannibalprojects.sampleproject.presentation.adapters.UsersListAdapter
 import com.hannibalprojects.sampleproject.presentation.viewmodels.ListUsersViewModel
-import dagger.android.support.DaggerFragment
-import java.util.concurrent.TimeUnit
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
+@AndroidEntryPoint
+class ListUsersFragment : Fragment() {
 
-class ListUsersFragment : DaggerFragment() {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    private val viewModel by viewModels<ListUsersViewModel> { viewModelFactory }
+    private val viewModel : ListUsersViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,12 +65,12 @@ class ListUsersFragment : DaggerFragment() {
     }
 
     private fun activateWorker(){
-        val downloadWorkRequest =
+ /*       val downloadWorkRequest =
             PeriodicWorkRequestBuilder<DownloadWorker>(60, TimeUnit.MINUTES).build()
         WorkManager.getInstance(requireContext()).enqueueUniquePeriodicWork(
             "DOWNLOAD_WORK_TAG",
             ExistingPeriodicWorkPolicy.KEEP,
             downloadWorkRequest
-        )
+        )*/
     }
 }
