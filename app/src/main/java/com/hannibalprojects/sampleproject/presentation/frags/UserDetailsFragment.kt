@@ -1,6 +1,5 @@
 package com.hannibalprojects.sampleproject.presentation.frags
 
-import android.os.Build
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.LayoutInflater
@@ -23,14 +22,12 @@ class UserDetailsFragment : Fragment() {
         const val ID_USER_ARG = "idUser"
     }
 
-    private val viewModel : UserDetailsViewModel by viewModels()
+    private val viewModel: UserDetailsViewModel by viewModels()
 
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        postponeEnterTransition()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
-        }
+            sharedElementEnterTransition =
+                TransitionInflater.from(context).inflateTransition(android.R.transition.move)
     }
 
     override fun onCreateView(
@@ -47,13 +44,12 @@ class UserDetailsFragment : Fragment() {
             false
         )
         binding.viewModel = viewModel
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        idUser?.let {
             binding.imageView2.transitionName = UsersListAdapter.TRANSITION_AVATAR + idUser
             binding.textView3.transitionName = UsersListAdapter.TRANSITION_FirstName + idUser
-            binding.textView4.transitionName = UsersListAdapter.TRANSITION_Lastame + idUser
+            binding.textView4.transitionName = UsersListAdapter.TRANSITION_LastName + idUser
+            viewModel.getUserDetails(idUser)
         }
-        viewModel.getUserDetails(idUser!!)
 
         return binding.root
     }

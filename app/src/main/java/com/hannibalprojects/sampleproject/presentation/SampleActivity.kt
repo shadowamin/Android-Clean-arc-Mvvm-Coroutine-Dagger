@@ -12,8 +12,5 @@ class SampleActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
-        val transaction = supportFragmentManager.beginTransaction()
-        val fragmentList = ListUsersFragment()
-        transaction.replace(R.id.fragment_container, fragmentList, "usersList").commit()
-    }
+   }
 }

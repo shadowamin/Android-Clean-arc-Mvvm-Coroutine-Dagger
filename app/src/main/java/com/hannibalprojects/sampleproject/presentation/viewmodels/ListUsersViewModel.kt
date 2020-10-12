@@ -1,6 +1,5 @@
 package com.hannibalprojects.sampleproject.presentation.viewmodels
 
-
 import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel

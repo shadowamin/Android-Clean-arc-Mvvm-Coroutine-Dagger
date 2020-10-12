@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation"
+    app:startDestination="@id/list_users">
+    <fragment
+        android:id="@+id/list_users"
+        android:name="com.hannibalprojects.sampleproject.presentation.frags.ListUsersFragment"
+        android:label="List profiles">
+        <action
+            android:id="@+id/action_list_users_to_user_details"
+            app:destination="@id/user_details" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/user_details"
+        android:name="com.hannibalprojects.sampleproject.presentation.frags.UserDetailsFragment"
+        android:label="User">
+
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
+</navigation>

@@ -26,7 +26,7 @@ class UsersListAdapter(val callback: (View, User) -> Unit) :
         }
         const val TRANSITION_AVATAR = "avatar"
         const val TRANSITION_FirstName = "lastName"
-        const val TRANSITION_Lastame = "firstName"
+        const val TRANSITION_LastName = "firstName"
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserCardViewHolder {
@@ -46,14 +46,13 @@ class UsersListAdapter(val callback: (View, User) -> Unit) :
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 holder.binding.imageView.transitionName = TRANSITION_AVATAR + item.id
                 holder.binding.firstName.transitionName = TRANSITION_FirstName + item.id
-                holder.binding.LastName.transitionName = TRANSITION_Lastame + item.id
+                holder.binding.LastName.transitionName = TRANSITION_LastName + item.id
             }
             holder.itemView.setOnClickListener {
                 callback(holder.itemView, item)
             }
         }
     }
-
 
     class UserCardViewHolder(val binding: UserCardBinding) : RecyclerView.ViewHolder(binding.root)
 }

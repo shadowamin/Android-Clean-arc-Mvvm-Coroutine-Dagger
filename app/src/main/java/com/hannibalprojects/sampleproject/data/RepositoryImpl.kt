@@ -19,6 +19,5 @@ class RepositoryImpl @Inject constructor(private val dataSource: UsersDataSource
     override suspend fun refreshUsers(): UsersResponse {
         return dataSource.refreshUsers()
     }
-
-
+    
 }
