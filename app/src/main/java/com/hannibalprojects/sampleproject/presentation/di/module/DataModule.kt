@@ -12,8 +12,11 @@ import com.hannibalprojects.sampleproject.presentation.di.module.ApiModule
 import com.hannibalprojects.sampleproject.presentation.di.module.DaoModule
 import dagger.Binds
 import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
 import javax.inject.Singleton
 
+@InstallIn(ApplicationComponent::class)
 @Module(includes = [DaoModule::class, ApiModule::class])
 abstract class DataModule {
 

@@ -1,13 +1,12 @@
 package com.hannibalprojects.sampleproject.presentation.viewmodels
 
 import androidx.databinding.ObservableField
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import com.hannibalprojects.sampleproject.domain.User
 import com.hannibalprojects.sampleproject.domain.usecases.GetUserUseCase
-import kotlinx.coroutines.Dispatchers
-import javax.inject.Inject
 
-class UserDetailsViewModel @Inject constructor(private val getUserUseCase: GetUserUseCase) : ViewModel(){
+class UserDetailsViewModel @ViewModelInject constructor(private val getUserUseCase: GetUserUseCase) : ViewModel(){
 
     val observableUser  = ObservableField<User>()
 

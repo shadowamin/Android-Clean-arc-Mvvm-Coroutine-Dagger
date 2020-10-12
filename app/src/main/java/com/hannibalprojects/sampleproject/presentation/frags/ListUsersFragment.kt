@@ -1,31 +1,33 @@
 package com.hannibalprojects.sampleproject.presentation.frags
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LivePagedListBuilder
-import androidx.work.*
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.hannibalprojects.sampleproject.R
 import com.hannibalprojects.sampleproject.databinding.FragmentUsersListBinding
 import com.hannibalprojects.sampleproject.presentation.DownloadWorker
 import com.hannibalprojects.sampleproject.presentation.adapters.UsersListAdapter
 import com.hannibalprojects.sampleproject.presentation.viewmodels.ListUsersViewModel
-import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
-class ListUsersFragment : DaggerFragment() {
+@AndroidEntryPoint
+class ListUsersFragment : Fragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    private val viewModel by viewModels<ListUsersViewModel> { viewModelFactory }
+    private val viewModel : ListUsersViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,23 +35,14 @@ class ListUsersFragment : DaggerFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val adapter = UsersListAdapter { v, user ->
-            val args = Bundle()
-            args.putInt(UserDetailsFragment.ID_USER_ARG, user.id)
-            val frag = UserDetailsFragment()
-            frag.arguments = args
-            val transaction = activity?.supportFragmentManager?.beginTransaction()
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val image = v.findViewById<ImageView>(R.id.imageView)
-                val firstName = v.findViewById<TextView>(R.id.firstName)
-                val lastName = v.findViewById<TextView>(R.id.LastName)
-                transaction?.addSharedElement(image, image.transitionName)
-                transaction?.addSharedElement(firstName, firstName.transitionName)
-                transaction?.addSharedElement(lastName, lastName.transitionName)
-            }
-
-            transaction?.addToBackStack("users")
-                ?.replace(R.id.fragment_container, frag)
-                ?.commit()
+            val image = v.findViewById<ImageView>(R.id.imageView)
+            val firstName = v.findViewById<TextView>(R.id.firstName)
+            val lastName = v.findViewById<TextView>(R.id.LastName)
+            val extras = FragmentNavigatorExtras(
+                image to image.transitionName, firstName to firstName.transitionName, lastName to lastName.transitionName
+            )
+            val bundle = bundleOf(UserDetailsFragment.ID_USER_ARG to user.id)
+            findNavController().navigate(R.id.action_list_users_to_user_details, bundle, null, extras)
         }
 
         val binding = DataBindingUtil.inflate<FragmentUsersListBinding>(

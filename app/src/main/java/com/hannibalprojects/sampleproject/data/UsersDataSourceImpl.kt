@@ -10,8 +10,8 @@ import com.hannibalprojects.sampleproject.domain.UsersResponse
 import javax.inject.Inject
 
 class UsersDataSourceImpl @Inject constructor(
-    val localDataSource: LocalDataSource,
-    val remoteDataSource: RemoteDataSource
+    private val localDataSource: LocalDataSource,
+    private val remoteDataSource: RemoteDataSource
 ) :
     UsersDataSource {
     override suspend fun getUser(id: Int): LiveData<User> {
