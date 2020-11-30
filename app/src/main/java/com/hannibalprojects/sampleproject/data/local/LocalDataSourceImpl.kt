@@ -1,6 +1,5 @@
 package com.hannibalprojects.sampleproject.data.local
 
-import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import com.hannibalprojects.sampleproject.domain.User
 import javax.inject.Inject
@@ -10,7 +9,7 @@ class LocalDataSourceImpl @Inject constructor(private val userDao: UserDao) : Lo
         return userDao.getAllLiveUsers()
     }
 
-    override suspend fun getUser(id: Int): LiveData<User> {
+    override suspend fun getUser(id: Int): User {
         return userDao.getUser(id)
     }
 

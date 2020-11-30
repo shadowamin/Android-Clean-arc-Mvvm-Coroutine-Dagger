@@ -1,7 +1,5 @@
 package com.hannibalprojects.sampleproject.data
 
-
-import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import com.hannibalprojects.sampleproject.data.local.LocalDataSource
 import com.hannibalprojects.sampleproject.data.remote.RemoteDataSource
@@ -14,7 +12,7 @@ class UsersDataSourceImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource
 ) :
     UsersDataSource {
-    override suspend fun getUser(id: Int): LiveData<User> {
+    override suspend fun getUser(id: Int): User {
         return localDataSource.getUser(id)
     }
 
@@ -31,6 +29,5 @@ class UsersDataSourceImpl @Inject constructor(
             UsersResponse(500, "Refresh failed")
         }
     }
-
 
 }

@@ -1,24 +1,30 @@
 package com.hannibalprojects.sampleproject.domain.usecases
 
 import kotlinx.coroutines.*
+import java.lang.Exception
 import kotlin.coroutines.CoroutineContext
 
+typealias CompletionBlock<T> = UseCase.Request<T>.() -> Unit
 abstract class UseCase<T> {
-
     private var parentJob: Job = Job()
     private var backgroundContext: CoroutineContext = Dispatchers.IO
     private var forgroundContext: CoroutineContext = Dispatchers.Main
 
     abstract suspend fun executeTask(): T
 
-    fun execute(block: (T) -> Unit) {
+    fun execute(block: CompletionBlock<T>) {
+        val response = Request<T>().apply { block() }
         unsubscribe()
         parentJob = Job()
         CoroutineScope(forgroundContext + parentJob).launch {
-            val result = withContext(backgroundContext) {
-                executeTask()
+            try {
+                val result = withContext(backgroundContext) {
+                    executeTask()
+                }
+                response(result)
+            } catch (e: Exception) {
+                response(e)
             }
-            block(result)
         }
     }
 
@@ -29,4 +35,28 @@ abstract class UseCase<T> {
         }
     }
 
+    class Request<T> {
+        private var onComplete: ((T) -> Unit)? = null
+        private var onError: ((Exception) -> Unit)? = null
+
+        fun onComplete(block: (T) -> Unit) {
+            onComplete = block
+        }
+
+        fun onError(block: (Exception) -> Unit) {
+            onError = block
+        }
+
+        operator fun invoke(result: T) {
+            onComplete?.let {
+                it.invoke(result)
+            }
+        }
+
+        operator fun invoke(error: Exception) {
+            onError?.let {
+                it.invoke(error)
+            }
+        }
+    }
 }
