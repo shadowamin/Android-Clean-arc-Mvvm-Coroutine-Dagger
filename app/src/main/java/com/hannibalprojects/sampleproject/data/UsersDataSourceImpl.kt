@@ -20,14 +20,9 @@ class UsersDataSourceImpl @Inject constructor(
         return localDataSource.getUsers()
     }
 
-    override suspend fun refreshUsers(): UsersResponse {
-        val remoteUsers = remoteDataSource.getUsers()
-        return if (remoteUsers != null) {
-            localDataSource.insertUsers(remoteUsers)
-            UsersResponse(200, "")
-        } else {
-            UsersResponse(500, "Refresh failed")
-        }
+    override suspend fun refreshUsers(): Boolean {
+        val remoteList = remoteDataSource.getUsers() ?: emptyList()
+        return localDataSource.insertUsers(remoteList)
     }
 
 }

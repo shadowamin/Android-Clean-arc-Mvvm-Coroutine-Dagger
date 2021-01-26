@@ -7,20 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Nullable
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.hannibalprojects.sampleproject.R
 import com.hannibalprojects.sampleproject.databinding.FragmentUserDetailsBinding
 import com.hannibalprojects.sampleproject.presentation.adapters.UsersListAdapter
 import com.hannibalprojects.sampleproject.presentation.models.Failure
-import com.hannibalprojects.sampleproject.presentation.models.Loading
-import com.hannibalprojects.sampleproject.presentation.models.Success
 import com.hannibalprojects.sampleproject.presentation.viewmodels.UserDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class UserDetailsFragment : Fragment() {
+class UserDetailsFragment : BaseFragment() {
 
     private val viewModel: UserDetailsViewModel by viewModels()
     private lateinit var binding: FragmentUserDetailsBinding
@@ -51,14 +48,7 @@ class UserDetailsFragment : Fragment() {
 
     private fun initObservers() {
         viewModel.loadUsersLiveData.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is Success -> {
-                }
-                is Failure -> {
-                }
-                is Loading -> {
-                }
-            }
+            if (it is Failure) displayError(it.error)
         })
     }
 

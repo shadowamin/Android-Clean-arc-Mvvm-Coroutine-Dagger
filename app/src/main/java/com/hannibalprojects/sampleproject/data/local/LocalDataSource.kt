@@ -8,5 +8,5 @@ interface LocalDataSource {
 
     suspend fun getUser(id: Int): User
 
-    suspend fun insertUsers(listUsers: List<User>)
+    suspend fun insertUsers(listUsers: List<User>) : Boolean
 }

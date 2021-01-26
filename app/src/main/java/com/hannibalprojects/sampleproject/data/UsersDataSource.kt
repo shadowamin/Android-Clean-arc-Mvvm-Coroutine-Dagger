@@ -9,5 +9,5 @@ interface UsersDataSource {
 
     suspend fun getUser(id : Int) : User
 
-    suspend fun refreshUsers() : UsersResponse
+    suspend fun refreshUsers() : Boolean
 }

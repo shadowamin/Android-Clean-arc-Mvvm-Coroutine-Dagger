@@ -23,23 +23,19 @@ import com.hannibalprojects.sampleproject.domain.User
 import com.hannibalprojects.sampleproject.presentation.DownloadWorker
 import com.hannibalprojects.sampleproject.presentation.adapters.UsersListAdapter
 import com.hannibalprojects.sampleproject.presentation.models.Failure
+import com.hannibalprojects.sampleproject.presentation.models.Loading
 import com.hannibalprojects.sampleproject.presentation.models.Success
 import com.hannibalprojects.sampleproject.presentation.viewmodels.ListUsersViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
-class ListUsersFragment : Fragment() {
+class ListUsersFragment : BaseFragment() {
 
     private val viewModel: ListUsersViewModel by viewModels()
     private lateinit var binding: FragmentUsersListBinding
-    private val adapter by lazy {
-        UsersListAdapter { v, user ->
-            onItemListClicked(v, user)
-        }
-    }
+    private val adapter by lazy { UsersListAdapter { v, user -> onItemListClicked(v, user) } }
 
-    //TODO : Add swipe to refresh and call the fun refresh users
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.fragment_users_list, container, false)
         return binding.root
@@ -50,10 +46,17 @@ class ListUsersFragment : Fragment() {
         initAdapter()
         initObservers()
         activateWorker()
+        initSwipeToRefreshListener()
     }
 
     private fun initAdapter() {
         binding.usersList.adapter = adapter
+    }
+
+    private fun initSwipeToRefreshListener() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.refreshUsers()
+        }
     }
 
     private fun onItemListClicked(view: View, user: User) {
@@ -72,13 +75,18 @@ class ListUsersFragment : Fragment() {
     private fun initObservers() {
         viewModel.loadUsersLiveData.observe(viewLifecycleOwner, Observer {
             when (it) {
-                is Success -> {
-                    LivePagedListBuilder(it.data, 5).build().observeForever {
-                        adapter.submitList(it)
-                    }
-                }
-                is Failure -> {
-                    //TODO: Manage show error
+                is Success -> LivePagedListBuilder(it.data, 5).build().observe(viewLifecycleOwner, Observer {
+                    adapter.submitList(it)
+                })
+                is Failure -> displayError(it.error)
+            }
+        })
+
+        viewModel.refreshUsersLiveData.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Failure -> displayError(it.error)
+                is Loading ->{
+                    binding.swipeRefreshLayout.isRefreshing = it.loading
                 }
             }
         })

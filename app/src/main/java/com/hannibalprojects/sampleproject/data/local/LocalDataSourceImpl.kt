@@ -13,7 +13,7 @@ class LocalDataSourceImpl @Inject constructor(private val userDao: UserDao) : Lo
         return userDao.getUser(id)
     }
 
-    override suspend fun insertUsers(listUsers: List<User>) {
-        userDao.insertAllUsers(listUsers)
+    override suspend fun insertUsers(listUsers: List<User>) : Boolean {
+      return  userDao.insertAllUsers(listUsers).isNotEmpty()
     }
 }
