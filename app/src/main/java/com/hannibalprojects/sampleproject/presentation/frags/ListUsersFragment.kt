@@ -34,18 +34,22 @@ class ListUsersFragment : BaseFragment() {
 
     private val viewModel: ListUsersViewModel by viewModels()
     private lateinit var binding: FragmentUsersListBinding
+    private var rootView: View? = null
     private val adapter by lazy { UsersListAdapter { v, user -> onItemListClicked(v, user) } }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        if (rootView != null) return rootView
         binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.fragment_users_list, container, false)
-        return binding.root
+        rootView = binding.root
+        initAdapter()
+        activateWorker()
+        viewModel.refreshUsers(false)
+        return rootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initAdapter()
         initObservers()
-        activateWorker()
         initSwipeToRefreshListener()
     }
 
@@ -55,7 +59,7 @@ class ListUsersFragment : BaseFragment() {
 
     private fun initSwipeToRefreshListener() {
         binding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.refreshUsers()
+            viewModel.refreshUsers(true)
         }
     }
 
@@ -85,7 +89,7 @@ class ListUsersFragment : BaseFragment() {
         viewModel.refreshUsersLiveData.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Failure -> displayError(it.error)
-                is Loading ->{
+                is Loading -> {
                     binding.swipeRefreshLayout.isRefreshing = it.loading
                 }
             }

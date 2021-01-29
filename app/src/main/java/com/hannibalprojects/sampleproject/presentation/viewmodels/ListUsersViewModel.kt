@@ -29,8 +29,8 @@ class ListUsersViewModel @ViewModelInject constructor(
     }
 
     val refreshUsersLiveData = MutableLiveData<DataWrapper<Boolean>>()
-    fun refreshUsers() {
-        refreshUsersLiveData.value = Loading(true)
+    fun refreshUsers(isRefresh : Boolean) {
+        refreshUsersLiveData.value = Loading(isRefresh)
         refreshUsersUseCase.execute {
             onComplete {
                 refreshUsersLiveData.value = Loading(false)

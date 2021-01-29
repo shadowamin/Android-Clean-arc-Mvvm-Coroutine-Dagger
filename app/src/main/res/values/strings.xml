@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SampleProject</string>
+    <string name="app_name">Android-Clean-Arc-Mvvm-Coroutine-Dagger</string>
 
     <!-- Errors -->
     <string name="error_occurred">Une erreur est survenue</string>

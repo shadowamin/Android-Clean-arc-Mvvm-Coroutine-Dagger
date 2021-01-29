@@ -8,5 +8,6 @@ This repository contains a detailed sample app that implements Clean Architectur
 * LiveData
 * Databinding
 * PagedListAdapter
+* Navigation
 * WorkManager
 
