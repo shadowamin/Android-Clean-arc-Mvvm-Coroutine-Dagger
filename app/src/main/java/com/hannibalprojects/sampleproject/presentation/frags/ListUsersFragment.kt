@@ -86,14 +86,6 @@ class ListUsersFragment : BaseFragment() {
             }
         })
 
-        viewModel.refreshUsersLiveData.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is Failure -> displayError(it.error)
-                is Loading -> {
-                    binding.swipeRefreshLayout.isRefreshing = it.loading
-                }
-            }
-        })
     }
 
     private fun activateWorker() {
