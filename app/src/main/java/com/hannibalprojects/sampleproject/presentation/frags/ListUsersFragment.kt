@@ -77,14 +77,6 @@ class ListUsersFragment : BaseFragment() {
     }
 
     private fun initObservers() {
-        viewModel.loadUsersLiveData.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is Success -> LivePagedListBuilder(it.data, 5).build().observe(viewLifecycleOwner, Observer {
-                    adapter.submitList(it)
-                })
-                is Failure -> displayError(it.error)
-            }
-        })
 
         viewModel.refreshUsersLiveData.observe(viewLifecycleOwner, Observer {
             when (it) {
