@@ -1,11 +1,11 @@
 package com.hannibalprojects.sampleproject.data.local
 
-import androidx.paging.DataSource
 import com.hannibalprojects.sampleproject.domain.User
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class LocalDataSourceImpl @Inject constructor(private val userDao: UserDao) : LocalDataSource {
-    override suspend fun getUsers(): DataSource.Factory<Int, User> {
+    override fun getUsers(): Flow<List<User>> {
         return userDao.getAllLiveUsers()
     }
 

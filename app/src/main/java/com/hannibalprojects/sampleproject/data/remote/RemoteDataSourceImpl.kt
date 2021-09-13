@@ -13,7 +13,6 @@ class RemoteDataSourceImpl @Inject constructor(val userApi: UserApi) : RemoteDat
     override suspend fun getUsers(): List<User>? {
         return try {
             val wsResponse = userApi.getUsers()
-            wsResponse.isSuccessful
             if (wsResponse.isSuccessful) {
                 wsResponse.body()?.data
             } else {

@@ -1,10 +1,10 @@
 package com.hannibalprojects.sampleproject.domain
 
-import androidx.paging.DataSource
+import kotlinx.coroutines.flow.Flow
 
 interface Repository {
 
-    suspend fun getUsers(): DataSource.Factory<Int, User>
+    fun getUsers(): Flow<List<User>>
 
     suspend fun getUser(id : Int): User
 
