@@ -47,7 +47,7 @@ class UserDetailsFragment : BaseFragment() {
     }
 
     private fun initObservers() {
-        viewModel.loadUsersLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.loadUsersLiveData.observe(viewLifecycleOwner, {
             if (it is Failure) displayError(it.error)
         })
     }

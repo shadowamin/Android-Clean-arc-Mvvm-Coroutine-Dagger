@@ -1,12 +1,13 @@
 package com.hannibalprojects.sampleproject.data.local
 
-import com.hannibalprojects.sampleproject.domain.User
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-interface LocalDataSource {
-    fun getUsers(): Flow<List<User>>
+class LocalDataSource @Inject constructor(private val userDao: UserDao) {
 
-    suspend fun getUser(id: Int): User
+    internal fun getUsers(): Flow<List<UserEntity>> = userDao.getAllLiveUsers()
 
-    suspend fun insertUsers(listUsers: List<User>) : Boolean
+    internal fun getUser(id: Int): UserEntity = userDao.getUser(id)
+
+    internal fun insertUsers(listUsers: List<UserEntity>) = userDao.insertAllUsers(listUsers).isNotEmpty()
 }

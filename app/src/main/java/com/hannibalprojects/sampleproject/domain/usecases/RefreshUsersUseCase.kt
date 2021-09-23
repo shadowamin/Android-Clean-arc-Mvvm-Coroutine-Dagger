@@ -1,12 +1,13 @@
 package com.hannibalprojects.sampleproject.domain.usecases
 
 import com.hannibalprojects.sampleproject.domain.Repository
-import com.hannibalprojects.sampleproject.domain.UsersResponse
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class RefreshUsersUseCase @Inject constructor(private val repository: Repository) : UseCase<Boolean>() {
+class RefreshUsersUseCase @Inject constructor(private val repository: Repository) {
 
-    override suspend fun executeTask(): Boolean {
-        return repository.refreshUsers()
+    suspend fun execute(): Boolean = withContext(Dispatchers.IO) {
+        repository.refreshUsers()
     }
 }

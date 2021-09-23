@@ -6,7 +6,7 @@ interface Repository {
 
     fun getUsers(): Flow<List<User>>
 
-    suspend fun getUser(id : Int): User
+    fun getUser(id : Int): User
 
     suspend fun refreshUsers(): Boolean
 }

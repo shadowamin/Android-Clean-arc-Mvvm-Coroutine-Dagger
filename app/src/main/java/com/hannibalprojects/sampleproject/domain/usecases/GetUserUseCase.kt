@@ -2,12 +2,13 @@ package com.hannibalprojects.sampleproject.domain.usecases
 
 import com.hannibalprojects.sampleproject.domain.Repository
 import com.hannibalprojects.sampleproject.domain.User
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class GetUserUseCase @Inject constructor(private val repository: Repository) : UseCase<User>() {
-    var userId =0
+class GetUserUseCase @Inject constructor(private val repository: Repository) {
 
-    override suspend fun executeTask(): User {
-        return repository.getUser(userId)
+    suspend fun execute(userId : Int): User = withContext(Dispatchers.IO) {
+        repository.getUser(userId)
     }
 }

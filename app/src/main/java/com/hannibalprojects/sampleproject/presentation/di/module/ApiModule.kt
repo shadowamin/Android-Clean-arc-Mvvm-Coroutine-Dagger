@@ -5,21 +5,22 @@ import com.hannibalprojects.sampleproject.data.remote.UserApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 @Module
-class ApiModule {
+object  ApiModule {
+
+    private const val WS_URL = "https://reqres.in"
 
     @Provides
     fun provideRetrofit(): Retrofit {
 
         return Retrofit.Builder()
-            .baseUrl("https://reqres.in")
+            .baseUrl(WS_URL)
             .addConverterFactory(
                 GsonConverterFactory.create(
                     GsonBuilder()
@@ -33,8 +34,6 @@ class ApiModule {
     }
 
     @Provides
-    fun provideUserApi(retrofit: Retrofit): UserApi {
-        return retrofit.create(UserApi::class.java)
-    }
+    fun provideUserApi(retrofit: Retrofit): UserApi = retrofit.create(UserApi::class.java)
 
 }

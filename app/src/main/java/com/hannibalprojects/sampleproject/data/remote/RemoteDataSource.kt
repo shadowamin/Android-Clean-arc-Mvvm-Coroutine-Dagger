@@ -1,7 +1,15 @@
 package com.hannibalprojects.sampleproject.data.remote
 
-import com.hannibalprojects.sampleproject.domain.User
+import javax.inject.Inject
 
-interface RemoteDataSource {
-    suspend fun getUsers() :List<User>?
+class RemoteDataSource @Inject constructor(private val userApi: UserApi) {
+
+    internal suspend fun getUsers(): List<WsUser>? {
+        val wsResponse = userApi.getUsers()
+        return if (wsResponse.isSuccessful) {
+            wsResponse.body()?.data
+        } else {
+            null
+        }
+    }
 }
