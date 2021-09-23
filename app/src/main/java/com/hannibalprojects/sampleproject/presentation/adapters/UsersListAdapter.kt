@@ -1,25 +1,27 @@
 package com.hannibalprojects.sampleproject.presentation.adapters
 
-import android.os.Build
+import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
-import androidx.paging.PagedListAdapter
+import androidx.navigation.Navigator
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.hannibalprojects.sampleproject.R
 import com.hannibalprojects.sampleproject.databinding.UserCardBinding
 import com.hannibalprojects.sampleproject.domain.User
+import com.hannibalprojects.sampleproject.presentation.frags.UserDetailsFragment
 
-class UsersListAdapter(val callback: (View, User) -> Unit) :
-    PagedListAdapter<User, UsersListAdapter.UserCardViewHolder>(DIFF_CALLBACK) {
+class UsersListAdapter(val callback: (Navigator.Extras, Bundle) -> Unit) :
+    ListAdapter<User, UsersListAdapter.UserCardViewHolder>(DIFF_CALLBACK) {
 
     companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<User>() {
             override fun areItemsTheSame(oldItem: User, newItem: User): Boolean =
                 oldItem.id == newItem.id
-
 
             override fun areContentsTheSame(oldItem: User, newItem: User): Boolean =
                 oldItem == newItem
@@ -40,16 +42,22 @@ class UsersListAdapter(val callback: (View, User) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: UserCardViewHolder, position: Int) {
-        holder.binding.user = getItem(position)
-        val item = getItem(position)
-        if (item != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                holder.binding.imageView.transitionName = TRANSITION_AVATAR + item.id
-                holder.binding.firstName.transitionName = TRANSITION_FirstName + item.id
-                holder.binding.LastName.transitionName = TRANSITION_LastName + item.id
+        with(holder.binding) {
+            val user = getItem(position)
+            holder.binding.user = user
+            user?.let {
+                userImage.transitionName = TRANSITION_AVATAR + user.id
+                userFirstName.transitionName = TRANSITION_FirstName + user.id
+                userLastName.transitionName = TRANSITION_LastName + user.id
             }
             holder.itemView.setOnClickListener {
-                callback(holder.itemView, item)
+                val extras = FragmentNavigatorExtras(
+                    userImage to userImage.transitionName,
+                    userFirstName to userFirstName.transitionName,
+                    userLastName to userLastName.transitionName
+                )
+                val bundle = bundleOf(UserDetailsFragment.ID_USER_ARG to user.id)
+                callback(extras, bundle)
             }
         }
     }
