@@ -51,8 +51,8 @@ dependencies {
     implementation 'androidx.paging:paging-runtime-ktx:3.0.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
     kapt "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
 
     //Retrofit
@@ -80,16 +80,16 @@ dependencies {
     testImplementation "androidx.room:room-testing:$room_version"
 
     // Hilt dependencies
-    implementation "com.google.dagger:hilt-android:2.38.1"
-    kapt "com.google.dagger:hilt-compiler:2.38.1"
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
     // TEST
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
-    testImplementation "org.junit.jupiter:junit-jupiter-api:5.7.2"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.7.2"
-    testImplementation "org.junit.jupiter:junit-jupiter-params:5.7.2"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit5_version"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit5_version"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:$junit5_version"
     testImplementation "org.mockito:mockito-junit-jupiter:3.11.2"
-    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:5.7.2"
+    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:$junit5_version"
     testImplementation 'org.mockito:mockito-core:3.11.2'
     testImplementation 'org.assertj:assertj-core:3.20.2'
     testImplementation 'org.mockito:mockito-inline:2.13.0'
