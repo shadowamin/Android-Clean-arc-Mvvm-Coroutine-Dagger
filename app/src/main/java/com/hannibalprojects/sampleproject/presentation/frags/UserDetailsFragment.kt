@@ -38,9 +38,9 @@ class UserDetailsFragment : BaseFragment() {
         binding.viewModel = viewModel
         val idUser = arguments?.getInt(ID_USER_ARG)
         idUser?.let {
-            binding.imageView2.transitionName = UsersListAdapter.TRANSITION_AVATAR + idUser
-            binding.textView3.transitionName = UsersListAdapter.TRANSITION_FirstName + idUser
-            binding.textView4.transitionName = UsersListAdapter.TRANSITION_LastName + idUser
+            binding.userImage.transitionName = UsersListAdapter.TRANSITION_AVATAR + idUser
+            binding.userFirstName.transitionName = UsersListAdapter.TRANSITION_FirstName + idUser
+            binding.userLastName.transitionName = UsersListAdapter.TRANSITION_LastName + idUser
             viewModel.getUserDetails(idUser)
         }
         initObservers()
