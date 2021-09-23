@@ -7,7 +7,6 @@ import com.hannibalprojects.sampleproject.domain.User
 import com.hannibalprojects.sampleproject.domain.usecases.GetUserUseCase
 import com.hannibalprojects.sampleproject.presentation.models.DataWrapper
 import com.hannibalprojects.sampleproject.presentation.models.Failure
-import com.hannibalprojects.sampleproject.presentation.models.Loading
 import com.hannibalprojects.sampleproject.presentation.models.RequestError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -25,10 +24,8 @@ import org.mockito.BDDMockito.given
 import org.mockito.BDDMockito.then
 import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.verify
 import org.mockito.junit.jupiter.MockitoExtension
-import java.util.*
 
 @ObsoleteCoroutinesApi
 @ExperimentalCoroutinesApi

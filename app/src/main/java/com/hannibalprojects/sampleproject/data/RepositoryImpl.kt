@@ -3,9 +3,7 @@ package com.hannibalprojects.sampleproject.data
 import com.hannibalprojects.sampleproject.data.Mapper.Companion.toDomainUser
 import com.hannibalprojects.sampleproject.data.Mapper.Companion.toEntity
 import com.hannibalprojects.sampleproject.data.local.LocalDataSource
-import com.hannibalprojects.sampleproject.data.local.UserEntity
 import com.hannibalprojects.sampleproject.data.remote.RemoteDataSource
-import com.hannibalprojects.sampleproject.data.remote.WsUser
 import com.hannibalprojects.sampleproject.domain.Repository
 import com.hannibalprojects.sampleproject.domain.User
 import kotlinx.coroutines.flow.Flow

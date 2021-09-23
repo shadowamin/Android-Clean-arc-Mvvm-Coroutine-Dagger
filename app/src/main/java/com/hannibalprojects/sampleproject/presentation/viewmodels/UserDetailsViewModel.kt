@@ -11,7 +11,6 @@ import com.hannibalprojects.sampleproject.presentation.models.Failure
 import com.hannibalprojects.sampleproject.presentation.models.RequestError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel

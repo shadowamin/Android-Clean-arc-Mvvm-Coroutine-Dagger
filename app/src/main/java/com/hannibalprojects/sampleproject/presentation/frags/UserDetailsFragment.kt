@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.annotation.Nullable
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.hannibalprojects.sampleproject.R
 import com.hannibalprojects.sampleproject.databinding.FragmentUserDetailsBinding
 import com.hannibalprojects.sampleproject.presentation.adapters.UsersListAdapter
@@ -28,7 +27,7 @@ class UserDetailsFragment : BaseFragment() {
             TransitionInflater.from(context).inflateTransition(android.R.transition.move)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_user_details, container, false)
         return binding.root
     }
