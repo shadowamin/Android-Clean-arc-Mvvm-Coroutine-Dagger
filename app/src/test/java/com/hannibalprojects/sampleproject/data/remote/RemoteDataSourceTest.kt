@@ -11,9 +11,12 @@ import org.mockito.BDDMockito.given
 import org.mockito.BDDMockito.then
 import org.mockito.InjectMocks
 import org.mockito.Mock
+import org.mockito.Mockito.mock
 import org.mockito.junit.jupiter.MockitoExtension
 import retrofit2.Response
+import java.lang.RuntimeException
 
+@ExperimentalCoroutinesApi
 @ExtendWith(MockitoExtension::class)
 class RemoteDataSourceTest {
 
@@ -24,7 +27,19 @@ class RemoteDataSourceTest {
     lateinit var remoteDataSource: RemoteDataSource
 
     @Test
-    @ExperimentalCoroutinesApi
+    fun `getUsers - when response throws exception - then should return exception`() = runBlockingTest {
+        // Given
+        given(userApi.getUsers()).willThrow(mock(RuntimeException::class.java))
+
+        // When
+        try {
+            remoteDataSource.getUsers()
+        } catch (e: Exception) {
+            assertThat(e).isInstanceOf(RuntimeException::class.java)
+        }
+    }
+
+    @Test
     fun `getUsers - when response is success - then should return a list of users`() = runBlockingTest {
         // Given
         val users = listOf(
@@ -54,7 +69,6 @@ class RemoteDataSourceTest {
     }
 
     @Test
-    @ExperimentalCoroutinesApi
     fun `getUsers - when response is failure - then should return null`() = runBlockingTest {
         // Given
         given(userApi.getUsers()).willReturn(

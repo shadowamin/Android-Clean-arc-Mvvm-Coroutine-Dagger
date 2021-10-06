@@ -23,13 +23,17 @@ object ErrorManager {
                     )
                 }
                 else -> {
-                    displayErrorToast(context, requestError.message)
+                    val errorMessage = if (requestError.message.isEmpty()) {
+                        context.getString(R.string.error_occurred)
+                    } else {
+                        requestError.message
+                    }
+                    displayErrorToast(context, errorMessage)
                 }
             }
         }
     }
 
-    // For simple errors
     private fun displayErrorToast(context: Context?, text: String) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }

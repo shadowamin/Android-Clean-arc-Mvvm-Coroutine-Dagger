@@ -12,14 +12,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 @InstallIn(SingletonComponent::class)
 @Module
-object  ApiModule {
+object ApiModule {
 
     private const val WS_URL = "https://reqres.in"
 
     @Provides
-    fun provideRetrofit(): Retrofit {
-
-        return Retrofit.Builder()
+    fun provideRetrofit(): Retrofit =
+        Retrofit.Builder()
             .baseUrl(WS_URL)
             .addConverterFactory(
                 GsonConverterFactory.create(
@@ -30,8 +29,6 @@ object  ApiModule {
             )
             .client(OkHttpClient.Builder().build())
             .build()
-
-    }
 
     @Provides
     fun provideUserApi(retrofit: Retrofit): UserApi = retrofit.create(UserApi::class.java)

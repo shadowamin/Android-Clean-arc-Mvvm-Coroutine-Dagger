@@ -25,8 +25,13 @@ class RefreshUsersUseCaseTest {
 
     @Test
     fun executeTask(): Unit = runBlocking {
+        // Given
         given(repository.refreshUsers()).willReturn(true)
+
+        // When
         val result = refreshUsersUseCase.execute()
+
+        // Then
         assertThat(result).isEqualTo(true)
         then(repository).should().refreshUsers()
     }
