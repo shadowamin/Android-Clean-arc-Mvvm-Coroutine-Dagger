@@ -2,7 +2,7 @@ package com.hannibalprojects.sampleproject.data.remote
 
 import com.google.gson.annotations.SerializedName
 
-data class WsUsers(val page: Int, val data: List<WsUser>)
+data class WsUsers(val page: Int, val data: List<WsUser>?)
 
 data class WsUser(
     val id: Int,

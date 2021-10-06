@@ -35,11 +35,16 @@ class GetUsersUseCaseTest {
 
     @Test
     fun executeTask(): Unit = runBlocking {
+        // Given
         val usersFlow: Flow<List<User>> = flow {
             listOf(user)
         }
         given(repository.getUsers()).willReturn(usersFlow)
+
+        // When
         val result = getUsersUseCase.execute()
+
+        // Then
         assertThat(result).isEqualTo(usersFlow)
 
         then(repository).should().getUsers()

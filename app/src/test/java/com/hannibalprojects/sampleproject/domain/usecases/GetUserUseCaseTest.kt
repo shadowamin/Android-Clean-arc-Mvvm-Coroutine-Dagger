@@ -33,8 +33,13 @@ class GetUserUseCaseTest {
 
     @Test
     fun executeTask(): Unit = runBlocking {
+        // Given
         given(repository.getUser(2)).willReturn(user)
+
+        // When
         val result = getUserUseCase.execute(2)
+
+        // Then
         assertThat(result).isEqualTo(user)
         then(repository).should().getUser(2)
     }
