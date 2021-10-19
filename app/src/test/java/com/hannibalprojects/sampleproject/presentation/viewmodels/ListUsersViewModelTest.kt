@@ -5,12 +5,12 @@ import androidx.arch.core.executor.TaskExecutor
 import androidx.lifecycle.Observer
 import com.hannibalprojects.sampleproject.domain.User
 import com.hannibalprojects.sampleproject.domain.usecases.GetUsersUseCase
-import com.hannibalprojects.sampleproject.domain.usecases.RefreshUsersUseCase
-import com.hannibalprojects.sampleproject.presentation.models.*
+import com.hannibalprojects.sampleproject.presentation.models.DataWrapper
+import com.hannibalprojects.sampleproject.presentation.models.Failure
+import com.hannibalprojects.sampleproject.presentation.models.RequestError
+import com.hannibalprojects.sampleproject.presentation.models.Success
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
@@ -32,9 +32,6 @@ class ListUsersViewModelTest {
 
     @Mock
     lateinit var usersUseCase: GetUsersUseCase
-
-    @Mock
-    lateinit var refreshUsersUseCase: RefreshUsersUseCase
 
     @InjectMocks
     lateinit var listUsersViewModel: ListUsersViewModel
@@ -75,30 +72,11 @@ class ListUsersViewModelTest {
     }
 
     @Test
-    fun `refreshUsers - when response - then pass value to observer`() = dispatcher.runBlockingTest {
-        // Given
-        given(refreshUsersUseCase.execute()).willReturn(true)
-        listUsersViewModel.refreshUsersLiveData.observeForever(refreshObserver)
-
-        // When
-        listUsersViewModel.refreshUsers(true)
-
-        // Then
-        then(refreshUsersUseCase).should().execute()
-        verify(refreshObserver).onChanged(Loading(true))
-        verify(refreshObserver).onChanged(Success(true))
-        verify(refreshObserver).onChanged(Loading(false))
-        listUsersViewModel.refreshUsersLiveData.removeObserver(refreshObserver)
-    }
-
-    @Test
     fun `loadUsers - when response - then post value to observer`() = dispatcher.runBlockingTest {
         // Given
             val listUsers = listOf(user)
-        val usersFlow: Flow<List<User>> = flow {
-            emit(listUsers)
-        }
-        given(usersUseCase.execute()).willReturn(usersFlow)
+
+        given(usersUseCase.execute()).willReturn(listUsers)
         listUsersViewModel.loadUsersLiveData.observeForever(listUsersObserver)
 
         // When

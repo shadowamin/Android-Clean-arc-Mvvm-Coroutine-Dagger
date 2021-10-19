@@ -1,21 +1,17 @@
 package com.hannibalprojects.sampleproject.data.remote
 
-import com.google.gson.GsonBuilder
 import com.hannibalprojects.sampleproject.data.remote.Utils.enqueueWithCode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockWebServer
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Assert
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.Exception
-import java.util.concurrent.TimeUnit
 
 @ExperimentalCoroutinesApi
 @ExtendWith(MockitoExtension::class)

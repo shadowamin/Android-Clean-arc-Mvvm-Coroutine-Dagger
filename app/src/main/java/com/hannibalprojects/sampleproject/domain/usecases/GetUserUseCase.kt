@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class GetUserUseCase @Inject constructor(private val repository: Repository) {
 
-    suspend fun execute(userId : Int): User = withContext(Dispatchers.IO) {
+    suspend fun execute(userId : Int): User? = withContext(Dispatchers.IO) {
         repository.getUser(userId)
     }
 }

@@ -32,14 +32,13 @@ class ListUsersFragment : BaseFragment() {
         if (rootView != null) return rootView
         binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.fragment_users_list, container, false)
         rootView = binding.root
-        initAdapter()
-        viewModel.refreshUsers(false)
         return rootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initObservers()
+        initAdapter()
         initSwipeToRefreshListener()
         viewModel.loadUsers()
     }
@@ -50,7 +49,7 @@ class ListUsersFragment : BaseFragment() {
 
     private fun initSwipeToRefreshListener() {
         binding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.refreshUsers(true)
+            viewModel.loadUsers()
         }
     }
 
@@ -58,12 +57,6 @@ class ListUsersFragment : BaseFragment() {
         viewModel.loadUsersLiveData.observe(viewLifecycleOwner, {
             when (it) {
                 is Success -> adapter.submitList(it.data)
-                is Failure -> displayError(it.error)
-            }
-        })
-
-        viewModel.refreshUsersLiveData.observe(viewLifecycleOwner, {
-            when (it) {
                 is Failure -> displayError(it.error)
                 is Loading -> binding.swipeRefreshLayout.isRefreshing = it.loading
             }

@@ -1,20 +1,14 @@
 package com.hannibalprojects.sampleproject.data
 
-import com.hannibalprojects.sampleproject.data.local.LocalDataSource
-import com.hannibalprojects.sampleproject.data.local.UserEntity
 import com.hannibalprojects.sampleproject.data.remote.RemoteDataSource
 import com.hannibalprojects.sampleproject.data.remote.WsUser
 import com.hannibalprojects.sampleproject.domain.User
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runBlockingTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
-import org.mockito.BDDMockito.then
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
@@ -26,21 +20,10 @@ class RepositoryImplTest {
     @Mock
     lateinit var remoteDataSource: RemoteDataSource
 
-    @Mock
-    lateinit var localDataSource: LocalDataSource
-
     @InjectMocks
     lateinit var repository: RepositoryImpl
 
     private val user = User(
-        id = 3,
-        email = "user@email.com",
-        firstName = "firstName",
-        lastName = "lastName",
-        avatar = "avatar"
-    )
-
-    private val userEntity = UserEntity(
         id = 3,
         email = "user@email.com",
         firstName = "firstName",
@@ -57,51 +40,42 @@ class RepositoryImplTest {
     )
 
     @Test
-    fun getUser() {
+    fun `getUser -  user id existe`() = runBlockingTest {
         // Given
-        given(localDataSource.getUser(2)).willReturn(userEntity)
+        val users = listOf(userWs)
+        given(remoteDataSource.getUsers()).willReturn(users)
+
+        // When
+        val result = repository.getUser(3)
+
+        // Then
+        assertThat(result).isEqualTo(user)
+    }
+
+    @Test
+    fun `getUser -  user id not exist`() = runBlockingTest {
+        // Given
+        val users = listOf(userWs)
+        given(remoteDataSource.getUsers()).willReturn(users)
 
         // When
         val result = repository.getUser(2)
 
         // Then
-        then(localDataSource).should().getUser(2)
-        assertThat(result).isEqualTo(user)
+        assertThat(result).isNull()
     }
 
     @Test
     fun getUsers() = runBlockingTest {
         // Given
-        val usersEntityFlow: Flow<List<UserEntity>> = flow {
-            listOf(userEntity)
-        }
-        given(localDataSource.getUsers()).willReturn(usersEntityFlow)
+        given(remoteDataSource.getUsers()).willReturn(listOf(userWs))
 
         // When
         val result = repository.getUsers()
 
         // Then
-        then(localDataSource).should().getUsers()
-        result.collect {
-            assertThat(it).isEqualTo(listOf(user))
-        }
-    }
-
-
-    @Test
-    fun refreshUsers() = runBlockingTest {
-        val users = listOf(userEntity)
-        val wsUsers = listOf(userWs)
-        given(remoteDataSource.getUsers()).willReturn(wsUsers)
-        given(localDataSource.insertUsers(users)).willReturn(true)
-
-        //When
-        val result = repository.refreshUsers()
-
-        //Then
-        then(remoteDataSource).should().getUsers()
-        then(localDataSource).should().insertUsers(users)
-        assertThat(result).isTrue()
+        assertThat(result).isEqualTo(listOf(user))
 
     }
+
 }
