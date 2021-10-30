@@ -9,3 +9,5 @@ This repository contains a detailed sample app that implements Clean Architectur
 * Databinding
 * Navigation
 
+
+
