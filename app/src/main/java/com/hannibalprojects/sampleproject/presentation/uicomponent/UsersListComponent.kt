@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -14,10 +15,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -28,6 +33,19 @@ import com.hannibalprojects.sampleproject.presentation.models.Failure
 import com.hannibalprojects.sampleproject.presentation.models.Loading
 import com.hannibalprojects.sampleproject.presentation.models.Success
 import com.hannibalprojects.sampleproject.presentation.utils.ErrorManager
+
+@Preview
+@Composable
+private fun PreviewUsersList() {
+    val user = User(
+        id = 3,
+        email = "user@email.com",
+        firstName = "firstName",
+        lastName = "lastName",
+        avatar = "https://reqres.in/img/faces/1-image.jpg"
+    )
+    UsersList(listOf(user, user)) {}
+}
 
 @Composable
 fun UsersListComponent(viewModel: UsersViewModel, navigateToDetails: (User) -> Unit) {
@@ -50,9 +68,7 @@ fun UsersListComponent(viewModel: UsersViewModel, navigateToDetails: (User) -> U
                 val error = (liveDataState as Failure).error
                 ErrorManager.displayError(LocalContext.current, error)
             }
-            is Loading -> {
-                CircularProgressIndicator()
-            }
+            is Loading -> CircularProgressIndicator()
         }
     }
 }
@@ -84,19 +100,29 @@ private fun UserItem(user: User, navigateToDetails: (User) -> Unit) {
         backgroundColor = Color.White,
         shape = RoundedCornerShape(corner = CornerSize(2.dp))
     ) {
-        Row(Modifier.clickable { navigateToDetails(user) }) {
-            Image(
-                painter = rememberImagePainter(user.avatar),
-                contentDescription = null,
-                modifier = Modifier.size(128.dp)
-            )
-            Column(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .align(Alignment.CenterVertically)
-            ) {
-                Text(text = "${user.firstName} ${user.lastName}", style = MaterialTheme.typography.h5)
+        Column(
+            modifier = Modifier
+                .padding(4.dp)
+                .fillMaxWidth()
+        ) {
+            Row(Modifier.clickable { navigateToDetails(user) }) {
+                Image(
+                    painter = rememberImagePainter(user.avatar),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(128.dp)
+                        .clip(CircleShape)
+                )
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                        .align(Alignment.CenterVertically)
+                ) {
+                    Text(
+                        text = "${user.firstName} ${user.lastName}",
+                        style = MaterialTheme.typography.h5)
+                }
             }
         }
     }

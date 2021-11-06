@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.hannibalprojects.sampleproject.presentation.uicomponent.UserProfile
+import com.hannibalprojects.sampleproject.presentation.uicomponent.LoadUserProfile
 import com.hannibalprojects.sampleproject.presentation.uicomponent.UsersListComponent
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -46,7 +46,7 @@ class UsersActivity : AppCompatActivity() {
                 }
             }
             composable(USER_DETAILS_SCREEN) { backStackEntry ->
-                UserProfile(
+                LoadUserProfile(
                     userId = backStackEntry.arguments?.getString("userId"),
                     viewModel = viewModel
                 )
