@@ -28,7 +28,7 @@ import org.mockito.junit.jupiter.MockitoExtension
 
 @ExperimentalCoroutinesApi
 @ExtendWith(MockitoExtension::class)
-class ListUsersViewModelTest {
+class UsersViewModelTest {
 
     @Mock
     lateinit var usersUseCase: GetUsersUseCase
@@ -37,7 +37,7 @@ class ListUsersViewModelTest {
     lateinit var refreshUsersUseCase: RefreshUsersUseCase
 
     @InjectMocks
-    lateinit var listUsersViewModel: ListUsersViewModel
+    lateinit var usersViewModel: UsersViewModel
 
     @Mock
     lateinit var refreshObserver: Observer<DataWrapper<Boolean>>
@@ -78,17 +78,17 @@ class ListUsersViewModelTest {
     fun `refreshUsers - when response - then pass value to observer`() = dispatcher.runBlockingTest {
         // Given
         given(refreshUsersUseCase.execute()).willReturn(true)
-        listUsersViewModel.refreshUsersLiveData.observeForever(refreshObserver)
+        usersViewModel.refreshUsersLiveData.observeForever(refreshObserver)
 
         // When
-        listUsersViewModel.refreshUsers(true)
+        usersViewModel.refreshUsers(true)
 
         // Then
         then(refreshUsersUseCase).should().execute()
         verify(refreshObserver).onChanged(Loading(true))
         verify(refreshObserver).onChanged(Success(true))
         verify(refreshObserver).onChanged(Loading(false))
-        listUsersViewModel.refreshUsersLiveData.removeObserver(refreshObserver)
+        usersViewModel.refreshUsersLiveData.removeObserver(refreshObserver)
     }
 
     @Test
@@ -99,15 +99,15 @@ class ListUsersViewModelTest {
             emit(listUsers)
         }
         given(usersUseCase.execute()).willReturn(usersFlow)
-        listUsersViewModel.loadUsersLiveData.observeForever(listUsersObserver)
+        usersViewModel.loadUsersLiveData.observeForever(listUsersObserver)
 
         // When
-        listUsersViewModel.loadUsers()
+        usersViewModel.loadUsers()
 
         // Then
         then(usersUseCase).should().execute()
         verify(listUsersObserver).onChanged(Success(listUsers))
-        listUsersViewModel.loadUsersLiveData.removeObserver(listUsersObserver)
+        usersViewModel.loadUsersLiveData.removeObserver(listUsersObserver)
     }
 
     @Test
@@ -115,15 +115,15 @@ class ListUsersViewModelTest {
         // Given
         val exception = RuntimeException()
         given(usersUseCase.execute()).willThrow(exception)
-        listUsersViewModel.loadUsersLiveData.observeForever(listUsersObserver)
+        usersViewModel.loadUsersLiveData.observeForever(listUsersObserver)
 
         // When
-        listUsersViewModel.loadUsers()
+        usersViewModel.loadUsers()
 
         // Then
         then(usersUseCase).should().execute()
         verify(listUsersObserver).onChanged(Failure(RequestError(exception)))
-        listUsersViewModel.loadUsersLiveData.removeObserver(listUsersObserver)
+        usersViewModel.loadUsersLiveData.removeObserver(listUsersObserver)
     }
 
 }

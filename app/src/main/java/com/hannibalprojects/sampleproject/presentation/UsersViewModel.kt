@@ -1,9 +1,10 @@
-package com.hannibalprojects.sampleproject.presentation.viewmodels
+package com.hannibalprojects.sampleproject.presentation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hannibalprojects.sampleproject.domain.User
+import com.hannibalprojects.sampleproject.domain.usecases.GetUserUseCase
 import com.hannibalprojects.sampleproject.domain.usecases.GetUsersUseCase
 import com.hannibalprojects.sampleproject.domain.usecases.RefreshUsersUseCase
 import com.hannibalprojects.sampleproject.presentation.models.*
@@ -13,13 +14,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ListUsersViewModel @Inject constructor(
+class UsersViewModel @Inject constructor(
     private val usersUseCase: GetUsersUseCase,
-    private val refreshUsersUseCase: RefreshUsersUseCase
+    private val refreshUsersUseCase: RefreshUsersUseCase,
+    private val userUseCase: GetUserUseCase
 ) : ViewModel() {
 
+    val loadUserLiveData = MutableLiveData<DataWrapper<User>>()
     val loadUsersLiveData = MutableLiveData<DataWrapper<List<User>>>()
-    fun loadUsers(){
+    fun loadUsers() {
         viewModelScope.launch {
             try {
                 usersUseCase.execute().collect {
@@ -31,17 +34,28 @@ class ListUsersViewModel @Inject constructor(
         }
     }
 
-    val refreshUsersLiveData = MutableLiveData<DataWrapper<Boolean>>()
+    val refreshUsersLiveData = MutableLiveData<Boolean>()
     fun refreshUsers(isRefresh: Boolean) {
         viewModelScope.launch {
-            refreshUsersLiveData.postValue(Loading(isRefresh))
+            refreshUsersLiveData.postValue(isRefresh)
             try {
-                val data = refreshUsersUseCase.execute()
-                refreshUsersLiveData.postValue(Success(data))
+                refreshUsersUseCase.execute()
+                refreshUsersLiveData.postValue(false)
             } catch (e: Exception) {
-                refreshUsersLiveData.postValue(Failure(RequestError(e)))
+                refreshUsersLiveData.postValue(false)
             }
-            refreshUsersLiveData.postValue(Loading(false))
+            refreshUsersLiveData.postValue(false)
+        }
+    }
+
+    fun getUserDetails(id: Int) {
+        viewModelScope.launch {
+            try {
+                val user = userUseCase.execute(id)
+                loadUserLiveData.postValue(Success(user))
+            } catch (e: Exception) {
+                loadUserLiveData.postValue(Failure(RequestError(e)))
+            }
         }
     }
 }

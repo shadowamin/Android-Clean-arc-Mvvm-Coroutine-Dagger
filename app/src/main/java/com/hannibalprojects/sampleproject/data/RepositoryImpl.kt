@@ -16,7 +16,9 @@ class RepositoryImpl @Inject constructor(
 ) : Repository {
 
     override fun getUsers(): Flow<List<User>> =
-        localDataSource.getUsers().map { it.map { userEntity -> userEntity.toDomainUser() } }
+        localDataSource.getUsers().map {
+            it.map { userEntity -> userEntity.toDomainUser() }
+        }
 
     override fun getUser(id: Int): User = localDataSource.getUser(id).toDomainUser()
 
